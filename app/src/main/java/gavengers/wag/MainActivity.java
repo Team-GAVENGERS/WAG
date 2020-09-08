@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
         showToast("상연이는 음탕해~");
         showToast("싼쌈도 음탕해");
         showToast("팍태도 음탕해");
+        showToast("팍태 그는 신인가...");
+
         TextView text = findViewById(R.id.text1);
         text.setText("팤태현!팤태현!팤태현!팤태현!팤태현!팤태현!팤태현!팤태현!");
     }
