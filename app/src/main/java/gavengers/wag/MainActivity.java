@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView text = findViewById(R.id.text1);
         text.setText("팤태현!팤태현!팤태현!팤태현!팤태현!팤태현!팤태현!팤태현!");
+        showToast("싼쌈 뿌리뽑아야돼 알바 끝나고 집갈 때 골목길 조심해");
     }
     public void showToast(String str){
         Toast.makeText(this.getApplicationContext(),str, Toast.LENGTH_SHORT).show();
