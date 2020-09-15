@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "471622155085",
+    "firebase_url": "https://wag-63a71.firebaseio.com",
+    "project_id": "wag-63a71",
+    "storage_bucket": "wag-63a71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471622155085:android:3d7ec2d024136ca3431504",
+        "android_client_info": {
+          "package_name": "gavengers.wag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471622155085-nqm9qh0o6albvm57bdrscdarms2jrjqi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwoIdCmPukBSPJ-uMGpT8ylsCaKJnclPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471622155085-nqm9qh0o6albvm57bdrscdarms2jrjqi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
