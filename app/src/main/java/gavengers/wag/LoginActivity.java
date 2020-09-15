@@ -22,7 +22,6 @@ public class LoginActivity extends AppCompatActivity
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         setContentView(R.layout.login_layout);
-
         mAuth = FirebaseAuth.getInstance();
     }
 
