@@ -51,4 +51,21 @@ public class LoginActivity extends AppCompatActivity
                 });
         // [END create_user_with_email]
     }
+
+    private void SignIn(String email, String password){
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // 성공
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // 실패
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 }
