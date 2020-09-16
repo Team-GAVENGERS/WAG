@@ -66,11 +66,14 @@ public class RegisterActivity extends AppCompatActivity {
             passwordChk.setText("");
             return;
         }
+        Log.d("test","asdasdasasd");
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
                         if (task.isSuccessful()) {
+                            Log.d("test1321","asdasdasasd");
                             // 로그인 성공
                             firebaseUser = mAuth.getCurrentUser();
 

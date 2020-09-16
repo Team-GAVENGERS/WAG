@@ -25,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //public void changeToTest(View v){
-      //  Intent testIntent =new Intent(getApplicationContext(),LoginActivity.class);
-     //   startActivity(testIntent);
-    //}
+    public void changeToTest(View v){
+       Intent testIntent =new Intent(getApplicationContext(),PlanActivity.class);
+        startActivity(testIntent);
+    }
 
     public void showToast(String str){
         Toast.makeText(this.getApplicationContext(),str, Toast.LENGTH_SHORT).show();

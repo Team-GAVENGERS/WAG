@@ -8,7 +8,7 @@
     android:gravity="bottom"
     android:layout_gravity="bottom"
     app:umanoDragView="@id/dragview"
-    app:umanoScrollableView="@id/listView"
+    app:umanoScrollableView="@id/mainMenu"
 
     app:umanoPanelHeight="70dp"
     app:umanoOverlay="false"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Main content"/>
+            android:text="일정 화면입니다. (임시)"/>
     </RelativeLayout>
 
    <LinearLayout
@@ -44,21 +44,82 @@
        
        <RelativeLayout
            android:layout_width="match_parent"
-           android:layout_height="68dp">
+           android:layout_height="68dp"
+           android:gravity="center"
+           >
 
            <TextView
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:paddingLeft="16dp"
-               android:text="Action"/>
+               android:textSize="30dp"
+               android:text="Main menu"/>
 
        </RelativeLayout>
-
+       <!--
        <ListView
            android:layout_width="match_parent"
            android:layout_height="300dp"
            android:id="@+id/listView">
+       </ListView>-->
 
-       </ListView>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/mainMenu"
+           android:orientation="vertical"
+           android:gravity="center"
+           >
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:orientation="horizontal">
+               <Button
+                   android:id="@+id/planBtn"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="5"
+
+                   android:text="Plan">
+
+               </Button>
+               <Button
+                   android:id="@+id/mapBtn"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="5"
+
+                   android:text="Map">
+
+               </Button>
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:orientation="horizontal">
+               <Button
+                   android:id="@+id/friendBtn"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="5"
+
+                   android:text="Friend">
+
+               </Button>
+               <Button
+                   android:id="@+id/settingBtn"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="5"
+
+                   android:text="Setting">
+
+               </Button>
+           </LinearLayout>
+
+
+       </LinearLayout>
+
+
    </LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
