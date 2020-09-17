@@ -48,10 +48,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /*
     public void changeToTest(View v){
        Intent testIntent =new Intent(getApplicationContext(),PlanActivity.class);
         startActivity(testIntent);
-    }
+    }*/
 
     public void showToast(String str){
         Toast.makeText(this.getApplicationContext(),str, Toast.LENGTH_SHORT).show();
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "Login Success",
                                     Toast.LENGTH_SHORT).show();
-                            //Intent intent = new Intent(getApplicationContext(),?.class); 액티비티 만들면 그 class로 연결
-                            //startActivity(intent);
+                            Intent intent = new Intent(getApplicationContext(),MenuActivity.class); // 액티비티 만들면 그 class로 연결 -> 완료
+                            startActivity(intent);
 
                         } else {
                             // 실패

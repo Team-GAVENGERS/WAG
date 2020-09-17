@@ -15,12 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PlanActivity"></activity>
         <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".MapActivity"></activity>
-        <activity android:name=".SettingActivity"></activity>
-        <activity android:name=".FriendActivity"></activity>
         <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".MenuActivity"></activity>
     </application>
 
 </manifest>
