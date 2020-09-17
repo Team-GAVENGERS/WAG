@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -90,6 +91,17 @@ public class RegisterActivity extends AppCompatActivity {
                                         Log.d("UserData/UID", "UserData successfully written!");
                                         Toast.makeText(getApplicationContext(), "회원가입 성공",
                                                 Toast.LENGTH_SHORT).show();
+                                        firebaseUser.getIdToken(true)
+                                                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                                        if (task.isSuccessful()) {
+                                                            String idToken = task.getResult().getToken();
+                                                            Log.d("UserData/Token", idToken);
+                                                        } else {
+                                                            // Handle error -> task.getException();
+                                                        }
+                                                    }
+                                                });
                                     }
                                 })
                                         .addOnFailureListener(new OnFailureListener() {

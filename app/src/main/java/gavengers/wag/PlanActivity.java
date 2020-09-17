@@ -15,7 +15,7 @@ public class PlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.plan_layout);
+        setContentView(R.layout.plan);
 
         Button plan_Btn = findViewById(R.id.planBtn);
         Button map_Btn = findViewById(R.id.mapBtn);
