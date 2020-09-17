@@ -67,23 +67,19 @@ public class RegisterActivity extends AppCompatActivity {
             passwordChk.setText("");
             return;
         }
-        Log.d("test","asdasdasasd");
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
-                            Log.d("test1321","asdasdasasd");
                             // 로그인 성공
                             firebaseUser = mAuth.getCurrentUser();
-
-                            String uid = firebaseUser.getUid();
+                            String uid = firebaseUser.getUid(); //UID값
 
                             Map<String, Object> user = new HashMap<>();
                             user.put("UID", uid);
                             user.put("Nickname", nickname);
-
                                 db.collection("UserData").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -119,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+        mAuth.signOut();
 
         // [END create_user_with_email]
     }

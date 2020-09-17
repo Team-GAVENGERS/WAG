@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this.getApplicationContext(),str, Toast.LENGTH_SHORT).show();
     }
     private void SignIn(String email, String password) {
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "Login Success",
                                     Toast.LENGTH_SHORT).show();
+                            //Intent intent = new Intent(getApplicationContext(),?.class); 액티비티 만들면 그 class로 연결
+                            //startActivity(intent);
 
                         } else {
                             // 실패
