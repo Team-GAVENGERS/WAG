@@ -22,8 +22,8 @@ public class CallRetrofit {
                 }
                 Model__nickname__CheckAlready checkAlready = response.body();
                 Log.d("연결이 성공적 : ", response.body().toString());
-                if(modelCheckAlready.getResult() == "True"){
-                    Log.d("중복검사: ", "중복된 번호가 아닙니다");
+                if(modelCheckAlready.getResult() == "False"){
+                    Log.d("중복검사: ", "중복된 닉네임이 아닙니다");
                     modelCheckAlready.setRight(true);
                 }
             }

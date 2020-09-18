@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
             passwordChk.setText("");
             return;
         }
-        
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
