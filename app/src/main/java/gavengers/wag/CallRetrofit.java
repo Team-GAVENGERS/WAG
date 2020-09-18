@@ -12,7 +12,7 @@ public class CallRetrofit {
 
         //Retrofit 호출
         final Model__nickname__CheckAlready modelCheckAlready = new Model__nickname__CheckAlready(nickname);
-        Call<Model__nickname__CheckAlready> call = RetrofitClient.getApiService().postOverlapCheck(modelCheckAlready);
+        Call<Model__nickname__CheckAlready> call = RetrofitClient.getApiService().nicknameCheck(modelCheckAlready);
         call.enqueue(new Callback<Model__nickname__CheckAlready>() {
             @Override
             public void onResponse(Call<Model__nickname__CheckAlready> call, Response<Model__nickname__CheckAlready> response) {

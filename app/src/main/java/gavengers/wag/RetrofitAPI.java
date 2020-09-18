@@ -7,7 +7,7 @@ import retrofit2.http.POST;
 public interface RetrofitAPI {
 
     @POST("usernameExists")
-    Call<Model__nickname__CheckAlready> postOverlapCheck(@Body Model__nickname__CheckAlready modelCheckAlready); //  (*데이터를 보낼때)
+    Call<Model__nickname__CheckAlready> nicknameCheck(@Body Model__nickname__CheckAlready modelCheckAlready); //  (*데이터를 보낼때)
 
     //@FormUrlEncoded
     //@POST("/auth/overlapChecker")

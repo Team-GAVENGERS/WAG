@@ -27,6 +27,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import retrofit2.Call;
+import retrofit2.Retrofit;
+
 
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -71,6 +74,9 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        CallRetrofit callRetrofit = new CallRetrofit();
+        boolean nicknameCheck = callRetrofit.callNicknamecheck(nickname);
+        Log.d("Retrofit2", "nickname check:" + String.valueOf(nicknameCheck));
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
