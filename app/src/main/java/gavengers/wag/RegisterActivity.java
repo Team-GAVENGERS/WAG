@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import gavengers.wag.HttpRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -69,6 +73,25 @@ public class RegisterActivity extends AppCompatActivity {
             passwordChk.setText("");
             return;
         }
+
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, Object> paramMap = new HashMap();
+        paramMap.put("nickname", nickname);    //파라미터 설정
+        String json = null;    //convert map to JSON String(JSON으로 변환)
+        try {
+            json = mapper.writeValueAsString(paramMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        String msgMap = HttpRequest.sendREST("api주소", json);
+
+        try {
+            Map<String, String> map = mapper.readValue(msgMap, new TypeReference<Map<String, String>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
