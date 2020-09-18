@@ -1,6 +1,7 @@
 package gavengers.wag;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,10 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText password;
     private EditText passwordChk;
     private Button go_back;
+
+    boolean nicknameCheck = false;
+    String checkedNick = "";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,17 +72,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-    private void SignUp(String email, final String password, final String nickname,final String pwChk) {
-        // [START create_user_with_email]
-        if(!password.equals(pwChk)){
-            Toast.makeText(getApplicationContext(), "비밀번호가 같지 않습니다.",
-                    Toast.LENGTH_SHORT).show();
-            passwordChk.setText("");
-            return;
-        }
+
+    public void checkNickname(View v){
+        final String nick = nickName.getText().toString();
 
         //Retrofit nickname check
-        final Model__nickname__CheckAlready modelCheckAlready = new Model__nickname__CheckAlready(nickname);
+        final Model__nickname__CheckAlready modelCheckAlready = new Model__nickname__CheckAlready(nick);
         Call<Model__nickname__CheckAlready> call = RetrofitClient.getApiService().nicknameCheck(modelCheckAlready);
         call.enqueue(new Callback<Model__nickname__CheckAlready>() {
             @Override
@@ -90,6 +90,12 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("연결이 성공적 : ", response.body().toString());
                 if(checkAlready.getResult().equals("False")){
                     Log.d("중복검사: ", "중복된 닉네임이 아닙니다");
+                    checkedNick = nick;
+                    nicknameCheck = true;
+                } else {
+                    Log.d("중복검사: ", "중복된 닉네임입니다.");
+                    nicknameCheck = false;
+                    checkedNick = null;
                 }
             }
             @Override
@@ -97,6 +103,21 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.e("연결실패", t.getMessage());
             }
         });
+    }
+    private void SignUp(String email, final String password, final String nickname,final String pwChk) {
+        // [START create_user_with_email]
+        if(!password.equals(pwChk)){
+            Toast.makeText(getApplicationContext(), "비밀번호가 같지 않습니다.",
+                    Toast.LENGTH_SHORT).show();
+            passwordChk.setText("");
+            return;
+        }
+
+        if(!checkedNick.equals(nickname) || !nicknameCheck){
+            Toast.makeText(getApplicationContext(), "닉네임을 확인해주세요.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
