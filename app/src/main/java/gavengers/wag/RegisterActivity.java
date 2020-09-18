@@ -25,6 +25,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import gavengers.wag.HttpRequest;
+
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -119,4 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // [END create_user_with_email]
     }
+
+
+
 }
