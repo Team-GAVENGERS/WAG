@@ -2,7 +2,10 @@ package gavengers.wag;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +46,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText password;
     private EditText passwordChk;
     private Button go_back;
-
+    private Button do_checkNick;
+    private Button do_register;
     boolean nicknameCheck = false;
     String checkedNick = "";
 
@@ -55,8 +59,16 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         email = findViewById(R.id.reg_input_email);
         nickName = findViewById(R.id.reg_input_nickname);
+        do_checkNick = findViewById(R.id.do_checkNick);
+        do_checkNick.setEnabled(false);
+        nickName.addTextChangedListener(textWatcher);
+
         password = findViewById(R.id.reg_input_pw);
+        password.setEnabled(false);
         passwordChk = findViewById(R.id.reg_input_pw_again);
+        passwordChk.setEnabled(false);
+        passwordChk.addTextChangedListener(textWatcher2);
+
         go_back = findViewById(R.id.go_back);
         go_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +76,8 @@ public class RegisterActivity extends AppCompatActivity {
                finish();
             }
         });
-        Button do_register = findViewById(R.id.do_register);
+        do_register = findViewById(R.id.do_register);
+        do_register.setEnabled(false);
         do_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +85,44 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+    TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if(editable.length() > 2){
+                do_checkNick.setEnabled(true);
+            }
+            else{
+                do_checkNick.setEnabled(false);
+            }
+        }
+    };
+    TextWatcher textWatcher2 = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if(editable.length() >= 8){
+                do_register.setEnabled(true);
+            }
+            else{
+                do_register.setEnabled(false);
+            }
+        }
+    };
     public void checkNickname(View v){
         final String nick = nickName.getText().toString();
 
@@ -90,10 +140,18 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("연결이 성공적 : ", response.body().toString());
                 if(checkAlready.getResult().equals("False")){
                     Log.d("중복검사: ", "중복된 닉네임이 아닙니다");
+                    Toast.makeText(getApplicationContext(), "사용 가능한 닉네임입니다.",Toast.LENGTH_SHORT).show();
+                    nickName.getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP);
+                    nickName.setTextColor(Color.GREEN);
+                    password.setEnabled(true);
+                    passwordChk.setEnabled(true);
                     checkedNick = nick;
                     nicknameCheck = true;
                 } else {
                     Log.d("중복검사: ", "중복된 닉네임입니다.");
+                    Toast.makeText(getApplicationContext(), "이미 사용중인 닉네임입니다.",Toast.LENGTH_SHORT).show();
+                    nickName.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+                    nickName.setTextColor(Color.RED);
                     nicknameCheck = false;
                     checkedNick = null;
                 }

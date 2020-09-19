@@ -119,8 +119,9 @@
         <Button
             android:id="@+id/do_checkNick"
             android:onClick="checkNickname"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="닉네임 중복확인" />
     </LinearLayout>
 </LinearLayout>
