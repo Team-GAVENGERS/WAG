@@ -30,8 +30,8 @@ public class CallRetrofit {
                 Log.d("연결이 성공적 : ", response.body().toString());
                 if(checkAlready.getResult().equals("False")){
                     Log.d("중복검사: ", "중복된 닉네임이 아닙니다");
-                    modelCheckAlready.setRight(true);
-                    modelCheckAlready.setResult("True");
+//                    modelCheckAlready.setRight(true);
+//                    modelCheckAlready.setResult("True");
                 }
             }
             @Override

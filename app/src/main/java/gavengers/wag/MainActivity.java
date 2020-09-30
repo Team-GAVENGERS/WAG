@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,10 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 public class MainActivity extends AppCompatActivity {
     private Button register_btn;
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private FirebaseAuth mAuth;
-
+    private FirebaseUser firebaseUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +69,24 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // 성공
                             FirebaseUser user = mAuth.getCurrentUser();
+                            firebaseUser = mAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "Login Success",
                                     Toast.LENGTH_SHORT).show();
+                            firebaseUser.getIdToken(true)
+                                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                            if(task.isSuccessful()){
+                                                Log.d("Token",task.getResult().getToken());
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                        }
+                                    });
                             Intent intent = new Intent(getApplicationContext(),MenuActivity.class); // 액티비티 만들면 그 class로 연결 -> 완료
                             startActivity(intent);
 

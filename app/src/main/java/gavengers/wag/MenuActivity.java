@@ -2,6 +2,9 @@ package gavengers.wag;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -16,12 +19,12 @@ public class MenuActivity extends AppCompatActivity {
     private FriendFragment friendFragment;
     private SettingFragment settingFragment;
     private FragmentTransaction transaction;
-
+    SlidingUpPanelLayout slidingUpPanelLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        slidingUpPanelLayout = findViewById(R.id.sliding_layout);
         fragmentManager = getSupportFragmentManager();
         planFragment = new PlanFragment();
         mapFragment = new MapFragment();
@@ -32,7 +35,12 @@ public class MenuActivity extends AppCompatActivity {
         transaction.replace(R.id.frameLayout, mapFragment).commitAllowingStateLoss();
 
     }
-
+    @Override
+    public void onBackPressed(){
+        if(slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        }
+    }
     public void clickMenu (View view){
 
         transaction = fragmentManager.beginTransaction();

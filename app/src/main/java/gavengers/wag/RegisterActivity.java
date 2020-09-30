@@ -36,7 +36,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -50,7 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Button do_register;
     boolean nicknameCheck = false;
     String checkedNick = "";
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +126,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Retrofit nickname check
         final Model__nickname__CheckAlready modelCheckAlready = new Model__nickname__CheckAlready(nick);
+
         Call<Model__nickname__CheckAlready> call = RetrofitClient.getApiService().nicknameCheck(modelCheckAlready);
+
         call.enqueue(new Callback<Model__nickname__CheckAlready>() {
             @Override
             public void onResponse(Call<Model__nickname__CheckAlready> call, Response<Model__nickname__CheckAlready> response) {

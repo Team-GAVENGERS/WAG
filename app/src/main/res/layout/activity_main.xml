@@ -7,6 +7,7 @@
     tools:context=".MenuActivity"
     android:gravity="bottom"
     android:layout_gravity="bottom"
+    android:id="@+id/sliding_layout"
     app:umanoDragView="@id/dragview"
     app:umanoScrollableView="@id/mainMenu"
     app:umanoPanelHeight="70dp"

@@ -5,6 +5,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="7"
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/addFriend_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="친구추가"/>
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
