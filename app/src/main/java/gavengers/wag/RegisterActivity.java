@@ -40,10 +40,12 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser firebaseUser;
+
     private EditText email;
     private EditText nickName;
     private EditText password;
     private EditText passwordChk;
+
     private Button go_back;
     private Button do_checkNick;
     private Button do_register;
@@ -55,12 +57,12 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.register_layout);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
         email = findViewById(R.id.reg_input_email);
         nickName = findViewById(R.id.reg_input_nickname);
         do_checkNick = findViewById(R.id.do_checkNick);
         do_checkNick.setEnabled(false);
         nickName.addTextChangedListener(textWatcher);
-
         password = findViewById(R.id.reg_input_pw);
         password.setEnabled(false);
         passwordChk = findViewById(R.id.reg_input_pw_again);
@@ -74,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
                finish();
             }
         });
+
         do_register = findViewById(R.id.do_register);
         do_register.setEnabled(false);
         do_register.setOnClickListener(new View.OnClickListener() {
@@ -121,9 +124,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     };
+    //Button Callback Method
     public void checkNickname(View v){
         final String nick = nickName.getText().toString();
-
         //Retrofit nickname check
         final Model__nickname__CheckAlready modelCheckAlready = new Model__nickname__CheckAlready(nick);
 
@@ -185,8 +188,8 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // 로그인 성공
                             firebaseUser = mAuth.getCurrentUser();
-                            String uid = firebaseUser.getUid(); //UID값
 
+                            String uid = firebaseUser.getUid(); //UID값
                             Map<String, Object> user = new HashMap<>();
                             user.put("UID", uid);
                             user.put("Nickname", nickname);
@@ -197,6 +200,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         Log.d("UserData/UID", "UserData successfully written!");
                                         Toast.makeText(getApplicationContext(), "회원가입 성공",
                                                 Toast.LENGTH_SHORT).show();
+
                                         firebaseUser.getIdToken(true)
                                                 .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                                                     public void onComplete(@NonNull Task<GetTokenResult> task) {

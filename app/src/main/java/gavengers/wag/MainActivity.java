@@ -3,6 +3,7 @@ package gavengers.wag;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,10 +28,14 @@ public class MainActivity extends AppCompatActivity {
     private EditText password;
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
+    public String token;
+    public static Context context_main;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+        context_main = this;
         mAuth = FirebaseAuth.getInstance();
         do_login = findViewById(R.id.do_login);
         email = findViewById(R.id.input_id);
@@ -77,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                                             if(task.isSuccessful()){
-                                                Log.d("Token",task.getResult().getToken());
+                                                token = task.getResult().getToken();
+                                                Log.d("Token",token);
                                             }
                                         }
                                     })

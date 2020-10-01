@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
