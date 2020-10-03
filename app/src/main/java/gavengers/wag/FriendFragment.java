@@ -55,6 +55,7 @@ public class FriendFragment extends Fragment {
         friend_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //이거 땜에 firebase cloud firestore rule 수정함
                 db.collection("UserData").document(own_uid).collection("friends").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
