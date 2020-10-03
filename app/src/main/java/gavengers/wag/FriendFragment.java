@@ -15,7 +15,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,21 +36,46 @@ public class FriendFragment extends Fragment {
     private Context context;
     Button add_btn;
     EditText input_friend_email;
+    Button friend_list;
+    String own_uid;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootview =(ViewGroup) inflater.inflate(R.layout.friend_layout, container, false);
+        own_uid = ((MenuActivity)MenuActivity.context).uid;
         context = container.getContext();
         db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
         mAuth = FirebaseAuth.getInstance();
         add_btn  =rootview.findViewById(R.id.addFriend_btn);
+        friend_list = rootview.findViewById(R.id.friend_list_btn);
+        friend_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.collection("UserData").document(own_uid).collection("friends").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(!task.isSuccessful()){
+                            Log.e("연결 실패","Error");
+                            return;
+                        }
+                        for(QueryDocumentSnapshot document: task.getResult()){
+                            Log.d("목록",document.getId() + " -> "+document.getData());
+                        }
+                    }
+                });
+            }
+        });
         //add_btn.setEnabled(false);
         input_friend_email = rootview.findViewById(R.id.input_friend_email);
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mytoken = ((MainActivity)MainActivity.context_main).token;
-                Log.e("토큰값",mytoken);
+                Log.d("토큰값",mytoken);
                 Model__friend__addFreind modelAddfriend = new Model__friend__addFreind(mytoken,input_friend_email.getText().toString());
 
                 Call<Model__friend__addFreind> call = RetrofitClient.getApiService().addFriends(modelAddfriend);
@@ -68,6 +97,7 @@ public class FriendFragment extends Fragment {
                         Log.e("연결 실패",t.getMessage());
                     }
                 });
+
             }
         });
         return rootview;

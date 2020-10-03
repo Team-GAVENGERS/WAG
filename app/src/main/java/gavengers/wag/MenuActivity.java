@@ -1,6 +1,8 @@
 package gavengers.wag;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,11 +22,15 @@ public class MenuActivity extends AppCompatActivity {
     private FriendFragment friendFragment;
     private SettingFragment settingFragment;
     private FragmentTransaction transaction;
+    public String uid;
+    public static Context context;
     SlidingUpPanelLayout slidingUpPanelLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = this;
+        uid = getIntent().getStringExtra("UID");
         slidingUpPanelLayout = findViewById(R.id.sliding_layout);
         fragmentManager = getSupportFragmentManager();
         planFragment = new PlanFragment();
@@ -54,6 +60,7 @@ public class MenuActivity extends AppCompatActivity {
                 transaction.replace(R.id.frameLayout, mapFragment).commitAllowingStateLoss();
                 break;
             case R.id.friendBtn:
+                Log.d("메뉴 UID",uid);
                 transaction.replace(R.id.frameLayout, friendFragment).commitAllowingStateLoss();
                 break;
             case R.id.settingBtn:

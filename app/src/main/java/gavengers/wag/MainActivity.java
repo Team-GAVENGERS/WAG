@@ -2,11 +2,14 @@ package gavengers.wag;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox auto_login;
     private SharedPreferences setting;
     private SharedPreferences.Editor editor;
+
+    private boolean isWriteEmail = false;
+    private boolean isWritePW = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +50,41 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         do_login = findViewById(R.id.do_login);
         email = findViewById(R.id.input_id);
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length() >= 4 && editable.toString().indexOf("@") > 0) {
+                    isWriteEmail = true;
+                }
+                if(isWriteEmail&&isWritePW) auto_login.setEnabled(true);
+            }
+        });
         password = findViewById(R.id.input_pw);
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length() >= 8){
+                    isWritePW = true;
+                }
+                if(isWriteEmail&isWritePW) auto_login.setEnabled(true);
+            }
+        });
         auto_login = findViewById(R.id.auto_login_chkbox);
+        auto_login.setEnabled(false);
+
         setting = getSharedPreferences("setting",0);
         if(setting.getBoolean("Enabled",false)){
             email.setText(setting.getString("email",""));
@@ -106,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // 성공
-                            FirebaseUser user = mAuth.getCurrentUser();
                             firebaseUser = mAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "Login Success",
                                     Toast.LENGTH_SHORT).show();
@@ -127,7 +165,10 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     });
                             Intent intent = new Intent(getApplicationContext(),MenuActivity.class); // 액티비티 만들면 그 class로 연결 -> 완료
+                            intent.putExtra("UID",firebaseUser.getUid());
+                            Log.d("메인액티비티 UID",firebaseUser.getUid());
                             startActivity(intent);
+
 
                         } else {
                             // 실패
