@@ -23,6 +23,7 @@ public class MenuActivity extends AppCompatActivity {
     private SettingFragment settingFragment;
     private FragmentTransaction transaction;
     public String uid;
+    public String email;
     public static Context context;
     SlidingUpPanelLayout slidingUpPanelLayout;
     @Override

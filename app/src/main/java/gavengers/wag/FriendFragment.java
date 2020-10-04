@@ -38,6 +38,7 @@ public class FriendFragment extends Fragment {
     EditText input_friend_email;
     Button friend_list;
     String own_uid;
+    String results ="";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +65,20 @@ public class FriendFragment extends Fragment {
                             return;
                         }
                         for(QueryDocumentSnapshot document: task.getResult()){
-                            Log.d("목록",document.getId() + " -> "+document.getData());
+                            db.collection("UserData").document(document.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task2) {
+                                    if(!task2.isSuccessful()){
+                                        Log.e("친구 연결 실패",task2.getException().getMessage());
+                                        return;
+                                    }
+                                    DocumentSnapshot doc = task2.getResult();
+                                    if(doc.exists()){
+                                        // getData()는 Map<String,Object> 리턴함 필드 여러개면 get(필드명)으로 하는게 나을듯
+                                        Log.d("Friend Data(Nickname)",doc.getData().get("Nickname").toString());
+                                    }
+                                }
+                            });
                         }
                     }
                 });
@@ -103,5 +117,4 @@ public class FriendFragment extends Fragment {
         });
         return rootview;
     }
-
 }

@@ -188,7 +188,6 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // 로그인 성공
                             firebaseUser = mAuth.getCurrentUser();
-
                             String uid = firebaseUser.getUid(); //UID값
                             Map<String, Object> user = new HashMap<>();
                             user.put("UID", uid);
