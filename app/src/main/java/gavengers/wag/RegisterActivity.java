@@ -190,8 +190,8 @@ public class RegisterActivity extends AppCompatActivity {
                             firebaseUser = mAuth.getCurrentUser();
                             String uid = firebaseUser.getUid(); //UID값
                             Map<String, Object> user = new HashMap<>();
-                            user.put("UID", uid);
-                            user.put("Nickname", nickname);
+                            user.put("uid", uid);
+                            user.put("nickname", nickname);
                                 db.collection("UserData").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
