@@ -14,7 +14,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -39,6 +38,7 @@ public class FriendFragment extends Fragment {
     Button friend_list;
     String own_uid;
     String results ="";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class FriendFragment extends Fragment {
                             Log.e("연결 실패","Error");
                             return;
                         }
+
                         for(QueryDocumentSnapshot document: task.getResult()){
                             db.collection("UserData").document(document.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -91,24 +92,26 @@ public class FriendFragment extends Fragment {
             public void onClick(View view) {
                 mytoken = ((MainActivity)MainActivity.context_main).token;
                 Log.d("토큰값",mytoken);
-                Model__friend__addFreind modelAddfriend = new Model__friend__addFreind(mytoken,input_friend_email.getText().toString());
+                Log.d("닉네임",input_friend_email.getText().toString());
+                Model__friend__addFriend modelAddFriend = new Model__friend__addFriend(mytoken,input_friend_email.getText().toString());
 
-                Call<Model__friend__addFreind> call = RetrofitClient.getApiService().addFriends(modelAddfriend);
+                Call<Model__friend__addFriend> call = RetrofitClient.getApiService().addFriends(modelAddFriend);
 
-                call.enqueue(new Callback<Model__friend__addFreind>() {
+                call.enqueue(new Callback<Model__friend__addFriend>() {
                     @Override
-                    public void onResponse(Call<Model__friend__addFreind> call, Response<Model__friend__addFreind> response) {
+                    public void onResponse(Call<Model__friend__addFriend> call, Response<Model__friend__addFriend> response) {
                         if(!response.isSuccessful()){
                             Log.e("연결 비정상적","Error: "+response.message()+" "+response.code());
                             return;
                         }
                         assert response.body() != null;
                         Log.d("연결 성공적",response.body().toString());
+
                         Toast.makeText(context, input_friend_email.getText().toString()+" 친구추가 요청 되었습니다.",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onFailure(Call<Model__friend__addFreind> call, Throwable t) {
+                    public void onFailure(Call<Model__friend__addFriend> call, Throwable t) {
                         Log.e("연결 실패",t.getMessage());
                     }
                 });

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox auto_login;
     private SharedPreferences setting;
     private SharedPreferences.Editor editor;
-
+    private Button search_account;
     private boolean isWriteEmail = false;
     private boolean isWritePW = false;
     @Override
@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         do_login = findViewById(R.id.do_login);
         email = findViewById(R.id.input_id);
+        search_account = findViewById(R.id.search_account);
+
         email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -84,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
         });
         auto_login = findViewById(R.id.auto_login_chkbox);
         auto_login.setEnabled(false);
-
         setting = getSharedPreferences("setting",0);
         if(setting.getBoolean("Enabled",false)){
             email.setText(setting.getString("email",""));
@@ -95,7 +96,11 @@ public class MainActivity extends AppCompatActivity {
         do_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(mAuth.getCurrentUser() != null)
                 SignIn(email.getText().toString(),password.getText().toString());
+                else{
+                    Log.e("Error","it is null");
+                }
             }
         });
         auto_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
