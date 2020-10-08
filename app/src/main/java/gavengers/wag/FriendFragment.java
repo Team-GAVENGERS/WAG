@@ -6,8 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,30 +36,38 @@ public class FriendFragment extends Fragment {
     private FirebaseUser firebaseUser;
     private String mytoken ="base";
     private Context context;
+    private boolean isOpen = false;
+    ArrayAdapter<String> list_adapter;
+    ListView f_list;
     Button add_btn;
     EditText input_friend_email;
     Button friend_list;
     String own_uid;
     String results ="";
-
+    TextView list_text;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootview =(ViewGroup) inflater.inflate(R.layout.friend_layout, container, false);
         own_uid = ((MenuActivity)MenuActivity.context).uid;
         context = container.getContext();
+        f_list = rootview.findViewById(R.id.friend_list);
+        f_list.setVisibility(View.GONE);
+        list_text = rootview.findViewById(R.id.list_text);
+        list_text.setVisibility(View.GONE);
+        list_adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1);
         db = FirebaseFirestore.getInstance();
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        db.setFirestoreSettings(settings);
+        firestore.setFirestoreSettings(settings);
         mAuth = FirebaseAuth.getInstance();
         add_btn  =rootview.findViewById(R.id.addFriend_btn);
         friend_list = rootview.findViewById(R.id.friend_list_btn);
         friend_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //이거 땜에 firebase cloud firestore rule 수정함
                 db.collection("UserData").document(own_uid).collection("friends").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -65,21 +76,22 @@ public class FriendFragment extends Fragment {
                             return;
                         }
 
-                        for(QueryDocumentSnapshot document: task.getResult()){
-                            db.collection("UserData").document(document.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task2) {
-                                    if(!task2.isSuccessful()){
-                                        Log.e("친구 연결 실패",task2.getException().getMessage());
-                                        return;
-                                    }
-                                    DocumentSnapshot doc = task2.getResult();
-                                    if(doc.exists()){
-                                        // getData()는 Map<String,Object> 리턴함 필드 여러개면 get(필드명)으로 하는게 나을듯
-                                        Log.d("Friend Data(Nickname)",doc.getData().get("Nickname").toString());
-                                    }
-                                }
-                            });
+                        if(!isOpen) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                list_adapter.add(document.getData().get("nickname").toString());
+                                //Log.d("List",document.getData().get("nickname").toString());
+                            }
+
+                            f_list.setAdapter(list_adapter);
+                            f_list.setVisibility(View.VISIBLE);
+                            list_text.setVisibility(View.VISIBLE);
+                            isOpen = true;
+                        }
+                        else{
+                            isOpen = false;
+                            list_adapter.clear();
+                            f_list.setVisibility(View.GONE);
+                            list_text.setVisibility(View.GONE);
                         }
                     }
                 });

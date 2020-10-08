@@ -21,12 +21,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="7"
+        android:layout_weight="3"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="친구추가할 이메일 입력"
+            android:text="친구추가할 닉네임 입력"
             android:textColor="#000000"/>
         <EditText
             android:id="@+id/input_friend_email"
@@ -45,6 +45,33 @@
             android:text="친구목록(Log)"/>
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ffff00">
+        <TextView
+            android:id="@+id/list_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="친구목록"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="8pt"/>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="3"
+        android:fillViewport="true">
+
+        <ListView
+            android:id="@+id/friend_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#cccccc"/>
+
+    </ScrollView>
 
 
 
