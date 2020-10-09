@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +32,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -80,23 +87,64 @@ public class FriendFragment extends Fragment {
                 .build();
         firestore.setFirestoreSettings(settings);
         mAuth = FirebaseAuth.getInstance();
-        db.collection("UserData").document(own_uid).collection("friends").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(!task.isSuccessful()){
-                    Log.e("요청받은 목록 연결 실패","Error");
-                    return;
-                }
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    if(document.getData().get("accept").toString().equals("false")){
-                        uid_list.add(document.getId());
-                        request_adapter.add(document.getData().get("nickname").
-                                toString()+" 님께서 친구요청 하셨습니다.");
+         final Handler handler = new Handler(Looper.getMainLooper()){
+            public void handleMessage(Message msg){
+                uid_list.clear();
+                db.collection("UserData").document(own_uid).collection("friends").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(!task.isSuccessful()){
+                            Log.e("요청받은 목록 연결 실패","Error");
+                            return;
+                        }
+                        ArrayAdapter<String> tmp = new ArrayAdapter<>(context,android.R.layout.simple_list_item_1);
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if(document.getData().get("accept").toString().equals("false")){
+                                uid_list.add(document.getId());
+                                tmp.add(document.getData().get("nickname").toString()+" 님께서 친구요청 하셨습니다.");
+                                //request_adapter.add(document.getData().get("nickname").
+                                 //      toString()+" 님께서 친구요청 하셨습니다.");
+                            }
+                        }
+                        if(request_adapter.getCount() != tmp.getCount()){
+                            request_list.setAdapter(tmp);
+                            request_adapter = tmp;
+                        }
+                        //request_list.setAdapter(request_adapter);
                     }
-                }
-                request_list.setAdapter(request_adapter);
+                });
             }
-        });
+        };
+        Timer timer = new Timer(true);
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Message msg = handler.obtainMessage();
+                handler.sendMessage(msg);
+            }
+            @Override
+            public boolean cancel(){
+                return super.cancel();
+            }
+        };
+        timer.schedule(timerTask,1000,3000);
+//        db.collection("UserData").document(own_uid).collection("friends").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(!task.isSuccessful()){
+//                    Log.e("요청받은 목록 연결 실패","Error");
+//                    return;
+//                }
+//                for (QueryDocumentSnapshot document : task.getResult()) {
+//                    if(document.getData().get("accept").toString().equals("false")){
+//                        uid_list.add(document.getId());
+//                        request_adapter.add(document.getData().get("nickname").
+//                                toString()+" 님께서 친구요청 하셨습니다.");
+//                    }
+//                }
+//                request_list.setAdapter(request_adapter);
+//            }
+//        });
         request_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> adapterView, View view, int i, long l) {
@@ -144,9 +192,10 @@ public class FriendFragment extends Fragment {
 
                         if(!isOpen) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("무슨 값?",document.getId());
-                                if(document.getData().get("accept").toString().equals("true"))
-                                list_adapter.add(document.getData().get("nickname").toString());
+                                if(document.getData().get("accept").toString().equals("true")) {
+                                    Log.d("Friend UID",document.getId());
+                                    list_adapter.add(document.getData().get("nickname").toString());
+                                }
                                 //Log.d("List",document.getData().get("nickname").toString());
                             }
 
@@ -200,4 +249,6 @@ public class FriendFragment extends Fragment {
         });
         return rootview;
     }
+
 }
+
