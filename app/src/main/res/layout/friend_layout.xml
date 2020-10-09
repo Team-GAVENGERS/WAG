@@ -5,18 +5,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center">
-    <LinearLayout
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="친구 요청 목록"/>
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="3"
-        android:orientation="vertical">
-        <TextView
-            android:gravity="center"
+        android:fillViewport="true"
+        >
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Friend screen"
-            android:textSize="50dp"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:id="@+id/request_list"/>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

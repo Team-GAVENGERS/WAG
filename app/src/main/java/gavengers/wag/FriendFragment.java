@@ -1,11 +1,14 @@
 package gavengers.wag;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,8 +27,13 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,14 +46,18 @@ public class FriendFragment extends Fragment {
     private String mytoken ="base";
     private Context context;
     private boolean isOpen = false;
+    private FriendRequestAdapter friendRequestAdapter;
     ArrayAdapter<String> list_adapter;
+    ArrayAdapter<String> request_adapter;
     ListView f_list;
+    ListView request_list;
     Button add_btn;
     EditText input_friend_email;
     Button friend_list;
     String own_uid;
     String results ="";
     TextView list_text;
+    private ArrayList<String> uid_list;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,17 +65,70 @@ public class FriendFragment extends Fragment {
         own_uid = ((MenuActivity)MenuActivity.context).uid;
         context = container.getContext();
         f_list = rootview.findViewById(R.id.friend_list);
+        request_list = rootview.findViewById(R.id.request_list);
         f_list.setVisibility(View.GONE);
         list_text = rootview.findViewById(R.id.list_text);
         list_text.setVisibility(View.GONE);
-        list_adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1);
         db = FirebaseFirestore.getInstance();
+        friendRequestAdapter = new FriendRequestAdapter(own_uid,db);
+        uid_list = new ArrayList<>();
+        list_adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1);
+        request_adapter = new ArrayAdapter<>(context,android.R.layout.simple_list_item_1);
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
         firestore.setFirestoreSettings(settings);
         mAuth = FirebaseAuth.getInstance();
+        db.collection("UserData").document(own_uid).collection("friends").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(!task.isSuccessful()){
+                    Log.e("요청받은 목록 연결 실패","Error");
+                    return;
+                }
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    if(document.getData().get("accept").toString().equals("false")){
+                        uid_list.add(document.getId());
+                        request_adapter.add(document.getData().get("nickname").
+                                toString()+" 님께서 친구요청 하셨습니다.");
+                    }
+                }
+                request_list.setAdapter(request_adapter);
+            }
+        });
+        request_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> adapterView, View view, int i, long l) {
+                final String nicks = adapterView.getItemAtPosition(i).toString().split(" ")[0];
+                final int index = i;
+                new AlertDialog.Builder(context).setMessage("친구 요청")
+                        .setPositiveButton("수락하기", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Map<String, Object> user_data = new HashMap<>();
+                                user_data.put("accept", "true");
+                                user_data.put("nickname", nicks);
+                                db.collection("UserData").document(own_uid).collection("friends").document(uid_list.get(index))
+                                        .set(user_data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("성공","accept : true로 변경 성공");
+                                        request_adapter.remove(adapterView.getItemAtPosition(index).toString());
+                                        request_adapter.notifyDataSetChanged();
+                                        request_list.setAdapter(request_adapter);
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("거절하기", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).show();
+            }
+        });
         add_btn  =rootview.findViewById(R.id.addFriend_btn);
         friend_list = rootview.findViewById(R.id.friend_list_btn);
         friend_list.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +144,8 @@ public class FriendFragment extends Fragment {
 
                         if(!isOpen) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("무슨 값?",document.getId());
+                                if(document.getData().get("accept").toString().equals("true"))
                                 list_adapter.add(document.getData().get("nickname").toString());
                                 //Log.d("List",document.getData().get("nickname").toString());
                             }
