@@ -85,7 +85,7 @@ public class FriendFragment extends Fragment {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        firestore.setFirestoreSettings(settings);
+//        firestore.setFirestoreSettings(settings);
         mAuth = FirebaseAuth.getInstance();
          final Handler handler = new Handler(Looper.getMainLooper()){
             public void handleMessage(Message msg){
