@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
 public class MainActivity extends AppCompatActivity {
+    // 테스트
     private Button register_btn;
     private Button do_login;
     private EditText email;
