@@ -81,6 +81,10 @@ public class FriendFragment extends Fragment {
         uid_list = new ArrayList<>();
         list_adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1);
         request_adapter = new ArrayAdapter<>(context,android.R.layout.simple_list_item_1);
+
+
+        // 흐에ㅔㅔㅔㅔㅔㅔㅔㅔㅔㅔ!!!!!!!!!
+
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
