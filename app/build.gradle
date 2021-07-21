@@ -41,6 +41,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
 
+    // Naver Map API
+    implementation 'com.naver.maps:map-sdk:3.12.0'
+
     // Material-CalendarView
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
 }
