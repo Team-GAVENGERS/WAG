@@ -6,12 +6,18 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <TextView
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Plan screen"
-        android:textSize="50dp" >
-
-    </TextView>
+        android:src="@drawable/ic_baseline_add_24"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="10dp"
+        android:backgroundTint="#32a1ff"
+        />
 
 </LinearLayout>
