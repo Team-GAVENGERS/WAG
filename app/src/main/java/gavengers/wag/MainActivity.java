@@ -97,11 +97,7 @@ public class MainActivity extends AppCompatActivity {
         do_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mAuth.getCurrentUser() != null)
                 SignIn(email.getText().toString(),password.getText().toString());
-                else{
-                    Log.e("Error","it is null");
-                }
             }
         });
         auto_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

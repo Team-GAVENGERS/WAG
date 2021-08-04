@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WAG</string>
+    <string name="appoint_type">일정 유형</string>
+    <string name="appoint_place_select">약속 장소 선택</string>
+    <string name="appoint_participants">참여자</string>
+    <string name="start_time">시작</string>
+    <string name="end_time">종료</string>
+    <string name="importance">중요도</string>
+    <string name="appoint_create">Create</string>
 </resources>

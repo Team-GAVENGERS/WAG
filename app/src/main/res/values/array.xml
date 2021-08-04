@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_appointment">
+        <item>정규 수업</item>
+        <item>학교 시험</item>
+        <item>동아리</item>
+        <item>행사</item>
+        <item>기타 약속</item>
+    </string-array>
+</resources>
