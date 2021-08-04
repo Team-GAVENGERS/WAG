@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="일정 제목을 입력해주세요."
+                android:textSize="30dp"
+                android:textColorHint="@color/colorBlack"
+                android:gravity="center"
+                />
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:orientation="vertical"
+                android:background="#E0E0E0"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:padding="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.25"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/appoint_type"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="20dp"
+                        />
+
+                    <Spinner
+                        android:id="@+id/spinner_appoint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:backgroundTint="#FFFFFF"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.25"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/start_time"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorBlack"
+                        />
+
+
+                    <DatePicker
+                        android:id="@+id/start_datepicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:datePickerMode="spinner"
+                        android:layout_weight="0.5" />
+
+                    <TimePicker
+                        android:id="@+id/start_timepicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:timePickerMode="spinner"
+                        android:layout_weight="0.5"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.25"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/end_time"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorBlack"
+                        />
+
+
+                    <DatePicker
+                        android:id="@+id/end_datepicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:datePickerMode="spinner"/>
+
+                    <TimePicker
+                        android:id="@+id/end_timepicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:timePickerMode="spinner"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.25"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/importance"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorBlack"
+                        />
+
+                    <SeekBar
+                        android:id="@+id/seekbar_importance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp">
+                    </SeekBar>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn_appoint_place"
+                    android:text="@string/appoint_place_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorRegister"/>
+
+                <TextView
+                    android:id="@+id/tv_appoint_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="예) IT 융합대학-305"
+                    android:layout_marginBottom="20dp"/>
+
+                <Button
+                    android:id="@+id/btn_appoint_participants"
+                    android:text="@string/appoint_participants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorRegister"/>
+
+                <TextView
+                    android:id="@+id/tv_appoint_participants"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="예) 박태현, 신승건, 변상연, 문병윤"
+                    android:layout_marginBottom="20dp"/>
+
+                <EditText
+                    android:id="@+id/et_memo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textMultiLine"
+                    android:hint="Memo"
+                    android:background="#E0E0E0"
+                    android:gravity="center_horizontal" />
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_appoint_create"
+                android:text="@string/appoint_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorButton1"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</LinearLayout>

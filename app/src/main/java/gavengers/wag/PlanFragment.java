@@ -1,5 +1,6 @@
 package gavengers.wag;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarUtils;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -24,11 +26,13 @@ import androidx.fragment.app.Fragment;
 
 public class PlanFragment extends Fragment {
     private MaterialCalendarView materialCalendarView;
+    private FloatingActionButton floatingActionButton;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView =(ViewGroup) inflater.inflate(R.layout.plan_layout, container, false);
 
+        floatingActionButton = rootView.findViewById(R.id.f_btn_create_appointment);
         materialCalendarView = rootView.findViewById(R.id.calendar_view);
         CalendarDay d = CalendarDay.today();
         materialCalendarView.clearSelection();
@@ -55,6 +59,15 @@ public class PlanFragment extends Fragment {
                 return day.getYear()+"에에에엥ㅇㅇㅇ"+day.getMonth();
             }
         });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AppointmentActivity.class);
+                startActivity(intent);
+            }
+        });
+
 //        materialCalendarView.setWeekDayFormatter(new WeekDayFormatter() {
 //            @Override
 //            public CharSequence format(int dayOfWeek) {
@@ -81,5 +94,7 @@ public class PlanFragment extends Fragment {
             }
         });
         return rootView;
+
+
     }
 }
