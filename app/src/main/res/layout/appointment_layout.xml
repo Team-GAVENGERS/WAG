@@ -24,17 +24,19 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 />
 
             <LinearLayout
-                android:layout_width="300dp"
-                android:layout_height="300dp"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
                 android:orientation="vertical"
                 android:background="#E0E0E0"
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
-                android:padding="20dp">
+                android:layout_margin="20dp"
+
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0px"
                     android:orientation="horizontal"
                     android:layout_weight="0.25"
                     android:padding="10dp">
@@ -59,53 +61,94 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0px"
                     android:orientation="horizontal"
                     android:layout_weight="0.25"
                     android:padding="10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
+                        android:layout_weight="2"
                         android:layout_height="wrap_content"
                         android:text="@string/start_time"
                         android:textSize="20dp"
                         android:textColor="@color/colorBlack"
                         />
 
-
-                    <DatePicker
+                    <TextView
+                        android:id="@+id/start_date"
+                        android:layout_width="0px"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorBlack"
+                        android:gravity="center"
+                        />
+                    <TextView
+                        android:id="@+id/start_time"
+                        android:layout_width="0px"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorBlack"
+                        android:gravity="left"
+                        />
+                    <!--<DatePicker
                         android:id="@+id/start_datepicker"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
+                        android:layout_weight="0.5"
                         android:layout_height="wrap_content"
                         android:datePickerMode="spinner"
-                        android:layout_weight="0.5" />
+                        android:calendarViewShown="false"
+                    />
 
                     <TimePicker
                         android:id="@+id/start_timepicker"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="wrap_content"
-                        android:timePickerMode="spinner"
                         android:layout_weight="0.5"
+
+                        android:timePickerMode="spinner"
                         />
+                    -->
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0px"
                     android:orientation="horizontal"
                     android:layout_weight="0.25"
                     android:padding="10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
+                        android:layout_weight="2"
                         android:layout_height="wrap_content"
                         android:text="@string/end_time"
                         android:textSize="20dp"
                         android:textColor="@color/colorBlack"
                         />
 
-
+                    <TextView
+                        android:id="@+id/end_date"
+                        android:layout_width="0px"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorBlack"
+                        android:gravity="center"
+                        />
+                    <TextView
+                        android:id="@+id/end_time"
+                        android:layout_width="0px"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorBlack"
+                        android:gravity="left"
+                        />
+                <!--
                     <DatePicker
                         android:id="@+id/end_datepicker"
                         android:layout_width="wrap_content"
@@ -117,13 +160,13 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:timePickerMode="spinner"/>
-
+                -->
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0px"
                     android:orientation="horizontal"
                     android:layout_weight="0.25"
                     android:padding="10dp">

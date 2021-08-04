@@ -1,5 +1,6 @@
 package gavengers.wag;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -41,8 +43,8 @@ public class PlanFragment extends Fragment {
         MaterialCalendarView.StateBuilder aaa= da.edit();
         aaa.setMaximumDate(CalendarDay.from(2022,12,31));
         aaa.setMinimumDate(CalendarDay.from(2019,1,1));
-        aaa.commit();
         aaa.isCacheCalendarPositionEnabled(true);
+        aaa.commit();
         materialCalendarView.setContentDescriptionCalendar("에효");
         materialCalendarView.setArrowColor(Color.parseColor("#f1a53e"));
         materialCalendarView.setLeftArrowMask(getResources().getDrawable(R.drawable.ic_launcher_foreground));
@@ -91,6 +93,20 @@ public class PlanFragment extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 //Log.d("dwd",list.get(0).getDay()+"");
                 Log.d("selected",date.getDay()+"");
+            }
+        });
+
+        materialCalendarView.setOnTitleClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog_MinWidth ,new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Log.d("date",year +" "+(month+1)+" "+dayOfMonth);
+                    }
+                }, d.getYear(), d.getMonth(),d.getDay());
+                dialog.getDatePicker().setCalendarViewShown(false);
+                dialog.show();
             }
         });
         return rootView;
