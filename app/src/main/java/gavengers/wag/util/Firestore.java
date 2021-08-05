@@ -21,11 +21,11 @@ public class Firestore {
     /**
      * 새로운 게시물의 정보를 DB에 추가하도록 요청한다.
      * @author Taehyun Park
-     * @param newPost 새 Appointment
+     * @param newAppo 새 Appointment
      * @return Task<DocumentReference>
      */
-    public static Task<DocumentReference> writeNewPost(Appointment newPost) {
-        return getFirestoreInstance().collection("appointment").add(newPost);
+    public static Task<DocumentReference> writeNewPost(Appointment newAppo) {
+        return getFirestoreInstance().collection("appointment").add(newAppo);
     }
 
 

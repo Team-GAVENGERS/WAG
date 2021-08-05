@@ -54,8 +54,11 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/spinner_appoint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
                         android:layout_marginLeft="15dp"
+                        android:spinnerMode="dropdown"
                         android:backgroundTint="#FFFFFF"
+                        android:entries="@array/array_appointment"
                         />
 
                 </LinearLayout>
@@ -191,6 +194,34 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.25"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_appoint_select"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="장소 선택"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="20dp"
+                        android:gravity="center"
+                        />
+
+                    <Spinner
+                        android:id="@+id/spinner_building"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:entries="@array/gachon_globalcampus_building"
+                        android:spinnerMode="dropdown">
+                    </Spinner>
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -200,19 +231,13 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center">
 
+                <!--
                 <Button
                     android:id="@+id/btn_appoint_place"
                     android:text="@string/appoint_place_select"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorRegister"/>
-
-                <TextView
-                    android:id="@+id/tv_appoint_select"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="예) IT 융합대학-305"
-                    android:layout_marginBottom="20dp"/>
+                    android:backgroundTint="@color/colorRegister"/>-->
 
                 <Button
                     android:id="@+id/btn_appoint_participants"
@@ -231,7 +256,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <EditText
                     android:id="@+id/et_memo"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="40dp"
                     android:inputType="textMultiLine"
                     android:hint="Memo"
                     android:background="#E0E0E0"
@@ -252,9 +277,5 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
 
         </LinearLayout>
-
     </ScrollView>
-
-
-
 </LinearLayout>
