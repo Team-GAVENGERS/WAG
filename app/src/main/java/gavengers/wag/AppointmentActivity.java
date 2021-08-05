@@ -229,17 +229,24 @@ public class AppointmentActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-                        if(hours[0] == hourOfDay && minutes[0] >= minute){
-                            showToast("종료시간이 시작시간보다 앞설 수 없습니다!");
-                            return;
-                        }
                         if(years[0] == years[1] && Integer.parseInt(months[0]) == Integer.parseInt(months[1])
                                 && Integer.parseInt(days[0]) == Integer.parseInt(days[1])){
-                            if(hours[0] <= hourOfDay) {
+                            if(hours[0] < hourOfDay) {
                                 isPM[1] = hourOfDay >= 12;
                                 hours[1] = hourOfDay;
                                 minutes[1] = minute;
                                 endTime.setText((isPM[1] ? "오후 " + (hours[1] == 12 ? hours[1] : (hours[1] - 12)) : "오전 " + (hours[1] == 0 ? 12 : hours[1])) + ":" + (minutes[1] < 10 ? "0" + minutes[1] : minutes[1]));
+                            }
+                            else if(hours[0] == hourOfDay){
+                                if(minutes[0] < minute){
+                                    isPM[1] = hourOfDay >= 12;
+                                    hours[1] = hourOfDay;
+                                    minutes[1] = minute;
+                                    endTime.setText((isPM[1] ? "오후 " + (hours[1] == 12 ? hours[1] : (hours[1] - 12)) : "오전 " + (hours[1] == 0 ? 12 : hours[1])) + ":" + (minutes[1] < 10 ? "0" + minutes[1] : minutes[1]));
+                                }
+                                else{
+                                    showToast("종료시간이 시작시간보다 앞설 수 없습니다!");
+                                }
                             }
                             else{
                                 showToast("종료시간이 시작시간보다 앞설 수 없습니다!");
