@@ -29,13 +29,15 @@ public class AppointmentActivity extends AppCompatActivity {
     TextView startTime;
     TextView endDate;
     TextView endTime;
-    int years;
-    String months;
-    String days;
-    int hours;
-    int minutes;
-    boolean isPM;
-    boolean isEndPM;
+
+    int[] years = new int[2];
+    String[] months = new String[2];
+    String[] days = new String[2];
+    int[] hours = new int[2];
+    int[] minutes = new int[2];
+    boolean[] isPM = new boolean[2];
+    // 0번째 인덱스 : 시작
+    // 1번째 인덱스 : 종료
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,28 +51,66 @@ public class AppointmentActivity extends AppCompatActivity {
         endTime = findViewById(R.id.end_time);
         Calendar calendar = Calendar.getInstance();
 
-        hours =calendar.get(Calendar.HOUR_OF_DAY);
-        minutes = calendar.get(Calendar.MINUTE);
-        isPM = hours >= 12;
-        isEndPM = hours +1 >= 12;
-        startTime.setText((isPM ? "오후 " + (hours == 12 ? hours : (hours - 12)) : "오전 " + (hours == 0 ? 12 : hours)) + ":" + (minutes < 10 ? "0"+minutes : minutes));
-        endTime.setText((isEndPM ? "오후 " + (hours +1 == 12 ? hours +1 : (hours +1 - 12)) : "오전 " + (hours +1 == 0 ? 12 : hours +1)) + ":" + (minutes < 10 ? "0"+minutes : minutes));
-        years = CalendarDay.today().getYear();
-        months = getMonthsFormatting(CalendarDay.today().getMonth());
-        days =  getDaysFormatting(CalendarDay.today().getDay());
+        hours[0] =calendar.get(Calendar.HOUR_OF_DAY);
+        minutes[0] = calendar.get(Calendar.MINUTE);
+        isPM[0] = hours[0] >= 12;
+        years[0] = CalendarDay.today().getYear();
+        months[0] = getMonthsFormatting(CalendarDay.today().getMonth());
+        days[0] = getDaysFormatting(CalendarDay.today().getDay());
 
-        startDate.setText(years+"-"+months+"-"+days);
-        endDate.setText(years+"-"+months+"-"+days);
+        hours[1] = hours[0] + 1;
+        minutes[1] = minutes[0];
+        isPM[1] = hours[1] >= 12;
+        years[1] = CalendarDay.today().getYear();
+        months[1] = getMonthsFormatting(CalendarDay.today().getMonth());
+        days[1] = getDaysFormatting(CalendarDay.today().getDay());
+
+        startTime.setText((isPM[0] ? "오후 " + (hours[0] == 12 ? hours[0] : (hours[0] - 12)) : "오전 " + (hours[0] == 0 ? 12 : hours[0])) + ":" + (minutes[0] < 10 ? "0"+minutes[0] : minutes[0]));
+        endTime.setText((isPM[1] ? "오후 " + (hours[1] == 12 ? hours[1] : (hours[1] - 12)) : "오전 " + (hours[1] == 0 ? 12 :hours[1])) + ":" + (minutes[1] < 10 ? "0"+minutes[1] : minutes[1]));
+
+
+        startDate.setText(years[0]+"-"+months[0]+"-"+days[0]);
+        endDate.setText(years[1]+"-"+months[1]+"-"+days[1]);
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerDialog dialog = new DatePickerDialog(AppointmentActivity.this, android.R.style.Theme_Holo_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        years = year;
-                        months = getMonthsFormatting(month);
-                        days = getDaysFormatting(dayOfMonth);
-                        startDate.setText(years+"-"+months+"-"+days);
+
+                        if(years[1] == year && Integer.parseInt(months[1]) == (month +1)
+                                && Integer.parseInt(days[1]) == dayOfMonth){
+                            if(hours[0] < hours[1]){
+                                years[0] = year;
+                                months[0] = getMonthsFormatting(month);
+                                days[0] = getDaysFormatting(dayOfMonth);
+                                startDate.setText(years[0] + "-" + months[0] + "-" + days[0]);
+                            }
+                            else if(hours[0] == hours[1]){
+                                if(minutes[0] < minutes[1]){
+                                    years[0] = year;
+                                    months[0] = getMonthsFormatting(month);
+                                    days[0] = getDaysFormatting(dayOfMonth);
+                                    startDate.setText(years[0] + "-" + months[0] + "-" + days[0]);
+                                }
+                                else{
+                                    showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                                }
+                            }
+                            else{
+                                showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                            }
+                            return;
+                        }
+                        if(years[1] >= year && Integer.parseInt(months[1]) >= (month + 1) && Integer.parseInt(days[1]) >= dayOfMonth ) {
+                            years[0] = year;
+                            months[0] = getMonthsFormatting(month);
+                            days[0] = getDaysFormatting(dayOfMonth);
+                            startDate.setText(years[0] + "-" + months[0] + "-" + days[0]);
+                        }
+                        else{
+                            showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                        }
                     }
                 }, CalendarDay.today().getYear(), CalendarDay.today().getMonth(), CalendarDay.today().getDay());
                 dialog.getDatePicker().setCalendarViewShown(false);
@@ -80,20 +120,145 @@ public class AppointmentActivity extends AppCompatActivity {
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 TimePickerDialog dialog = new TimePickerDialog(AppointmentActivity.this, android.R.style.Theme_Holo_Dialog_MinWidth, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        isPM = hourOfDay >= 12;
-                        hours = hourOfDay;
-                        minutes = minute;
-                        startTime.setText((isPM ? "오후 " + (hours == 12 ? hours : (hours - 12)) : "오전 " + (hours == 0 ? 12 : hours)) + ":" + (minutes < 10 ? "0"+minutes : minutes));
+
+                        if(years[0] == years[1] && Integer.parseInt(months[0]) == Integer.parseInt(months[1])
+                                && Integer.parseInt(days[0]) == Integer.parseInt(days[1])){
+                            if(hourOfDay < hours[1]){
+                                isPM[0] = hourOfDay >= 12;
+                                hours[0] = hourOfDay;
+                                minutes[0] = minute;
+                                startTime.setText((isPM[0] ? "오후 " + (hours[0] == 12 ? hours[0] : (hours[0] - 12)) : "오전 " + (hours[0] == 0 ? 12 : hours[0])) + ":" + (minutes[0] < 10 ? "0" + minutes[0] : minutes[0]));
+                            }
+                            else if(hourOfDay == hours[1]){
+                                if(minute < minutes[1]){
+                                    isPM[0] = hourOfDay >= 12;
+                                    hours[0] = hourOfDay;
+                                    minutes[0] = minute;
+                                    startTime.setText((isPM[0] ? "오후 " + (hours[0] == 12 ? hours[0] : (hours[0] - 12)) : "오전 " + (hours[0] == 0 ? 12 : hours[0])) + ":" + (minutes[0] < 10 ? "0" + minutes[0] : minutes[0]));
+                                }
+                                else{
+                                    showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                                }
+                            }
+                            else{
+                                showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                            }
+                            return;
+                        }
+                        if(years[0] <= years[1] && Integer.parseInt(months[0]) <= Integer.parseInt(months[1])
+                                && Integer.parseInt(days[0]) <= Integer.parseInt(days[1])){
+
+                            isPM[0] = hourOfDay >= 12;
+                            hours[0] = hourOfDay;
+                            minutes[0] = minute;
+                            startTime.setText((isPM[0] ? "오후 " + (hours[0] == 12 ? hours[0] : (hours[0] - 12)) : "오전 " + (hours[0] == 0 ? 12 : hours[0])) + ":" + (minutes[0] < 10 ? "0" + minutes[0] : minutes[0]));
+                            return;
+                        }
+                        if(hours[1] == hourOfDay && minutes[1] <= minute){
+                            showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                            return;
+                        }
+                        if(hours[1] >= hourOfDay) {
+                            isPM[0] = hourOfDay >= 12;
+                            hours[0] = hourOfDay;
+                            minutes[0] = minute;
+                            startTime.setText((isPM[0] ? "오후 " + (hours[0] == 12 ? hours[0] : (hours[0] - 12)) : "오전 " + (hours[0] == 0 ? 12 : hours[0])) + ":" + (minutes[0] < 10 ? "0" + minutes[0] : minutes[0]));
+                        }
+                        else{
+                            showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                        }
                     }
-                }, hours, minutes, false);
+                }, hours[0], minutes[0], false);
+                dialog.show();
+            }
+        });
+        endDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dialog = new DatePickerDialog(AppointmentActivity.this, android.R.style.Theme_Holo_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                        if(years[0] == year && Integer.parseInt(months[0]) == (month +1) && Integer.parseInt(days[0]) == dayOfMonth){
+                            if(hours[0] < hours[1]){
+                                years[1] = year;
+                                months[1] = getMonthsFormatting(month);
+                                days[1] = getDaysFormatting(dayOfMonth);
+                                endDate.setText(years[1] + "-" + months[1] + "-" + days[1]);
+                            }
+                            else if(hours[0] == hours[1]){
+                                if(minutes[0] < minutes[1]){
+                                    years[1] = year;
+                                    months[1] = getMonthsFormatting(month);
+                                    days[1] = getDaysFormatting(dayOfMonth);
+                                    endDate.setText(years[1] + "-" + months[1] + "-" + days[1]);
+                                }
+                                else{
+                                    showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                                }
+                            }
+                            else{
+                                showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                            }
+                            return;
+                        }
+                        if(years[0] <= year && Integer.parseInt(months[0]) <= (month +1) && Integer.parseInt(days[0]) <= dayOfMonth )
+                        {
+                            years[1] = year;
+                            months[1] = getMonthsFormatting(month);
+                            days[1] = getDaysFormatting(dayOfMonth);
+                            endDate.setText(years[1] + "-" + months[1] + "-" + days[1]);
+                        }
+                        else{
+                            showToast("종료날짜가 시작날짜보다 앞설 수 없습니다!");
+                        }
+                    }
+                }, CalendarDay.today().getYear(), CalendarDay.today().getMonth(), CalendarDay.today().getDay());
+                dialog.getDatePicker().setCalendarViewShown(false);
                 dialog.show();
             }
         });
 
+        endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog dialog = new TimePickerDialog(AppointmentActivity.this, android.R.style.Theme_Holo_Dialog_MinWidth, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                        if(hours[0] == hourOfDay && minutes[0] >= minute){
+                            showToast("종료시간이 시작시간보다 앞설 수 없습니다!");
+                            return;
+                        }
+                        if(years[0] == years[1] && Integer.parseInt(months[0]) == Integer.parseInt(months[1])
+                                && Integer.parseInt(days[0]) == Integer.parseInt(days[1])){
+                            if(hours[0] <= hourOfDay) {
+                                isPM[1] = hourOfDay >= 12;
+                                hours[1] = hourOfDay;
+                                minutes[1] = minute;
+                                endTime.setText((isPM[1] ? "오후 " + (hours[1] == 12 ? hours[1] : (hours[1] - 12)) : "오전 " + (hours[1] == 0 ? 12 : hours[1])) + ":" + (minutes[1] < 10 ? "0" + minutes[1] : minutes[1]));
+                            }
+                            else{
+                                showToast("종료시간이 시작시간보다 앞설 수 없습니다!");
+                            }
+                            return;
+                        }
+                        if(years[0] <= years[1] && Integer.parseInt(months[0])
+                                <= Integer.parseInt(months[1]) && Integer.parseInt(days[0]) <= Integer.parseInt(days[1])){
+                            isPM[1] = hourOfDay >= 12;
+                            hours[1] = hourOfDay;
+                            minutes[1] = minute;
+                            endTime.setText((isPM[1] ? "오후 " + (hours[1] == 12 ? hours[1] : (hours[1] - 12)) : "오전 " + (hours[1] == 0 ? 12 : hours[1])) + ":" + (minutes[1] < 10 ? "0" + minutes[1] : minutes[1]));
+                        }
+
+                    }
+                }, hours[1] , minutes[1], false);
+                dialog.show();
+            }
+        });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
@@ -116,5 +281,7 @@ public class AppointmentActivity extends AppCompatActivity {
     public String getDaysFormatting(int day){
         return day < 10 ? "0" + day : day+"";
     }
-
+    public void showToast(String text){
+        Toast.makeText(AppointmentActivity.this, text, Toast.LENGTH_SHORT).show();
+    }
 }
