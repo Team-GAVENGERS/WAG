@@ -7,21 +7,25 @@ import java.util.Date;
 public class Appointment {
 
     private int appointType; // 약속 유형
-    private Date startTime;  // 약속 시작 시간
-    private Date endTime;    // 약속 종료 시간
+    private String appointmentName; // 약속 타이틀
+    private String startTime;  // 약속 시작 시간
+    private String endTime;    // 약속 종료 시간
     private int importance;  // 중요도
     private int place;       // 장소
-    private ArrayList<String> participants; // 참여자 리스트
+    private ArrayList<String> participants; // 참여자 리스트 (추후에 )
     private String memoStr;  // 메모 String
+    private String writerId; // 작성자
 
-    public Appointment(int appointType, Date startTime, Date endTime, int importance, int place, ArrayList<String> participants, String memoStr) {
+    public Appointment(int appointType, String appointmentName, String startTime, String endTime, int importance, int place, ArrayList<String> participants, String memoStr, String writerId) {
         this.appointType = appointType;
+        this.appointmentName = appointmentName;
         this.startTime = startTime;
         this.endTime = endTime;
         this.importance = importance;
         this.place = place;
         this.participants = participants;
         this.memoStr = memoStr;
+        this.writerId = writerId;
     }
 
     public int getAppointType() {
@@ -32,19 +36,27 @@ public class Appointment {
         this.appointType = appointType;
     }
 
-    public Date getStartTime() {
+    public String getAppointmentName() {
+        return appointmentName;
+    }
+
+    public void setAppointmentName(String appointmentName) {
+        this.appointmentName = appointmentName;
+    }
+
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -79,4 +91,10 @@ public class Appointment {
     public void setMemoStr(String memoStr) {
         this.memoStr = memoStr;
     }
+
+    public String getWriterId(){
+        return writerId;
+    }
+
+    public void setWriterId(String writerId){ this.writerId = writerId; }
 }
