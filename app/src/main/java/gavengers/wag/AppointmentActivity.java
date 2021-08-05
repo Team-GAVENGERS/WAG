@@ -42,21 +42,19 @@ public class AppointmentActivity extends AppCompatActivity {
         setContentView(R.layout.appointment_layout);
 
         spinner = findViewById(R.id.spinner_appoint);
-
         items = getResources().getStringArray(R.array.array_appointment);
         startDate = findViewById(R.id.start_date);
         startTime = findViewById(R.id.start_time);
         endDate = findViewById(R.id.end_date);
         endTime = findViewById(R.id.end_time);
-
         Calendar calendar = Calendar.getInstance();
+
         hours =calendar.get(Calendar.HOUR_OF_DAY);
         minutes = calendar.get(Calendar.MINUTE);
         isPM = hours >= 12;
         isEndPM = hours +1 >= 12;
         startTime.setText((isPM ? "오후 " + (hours == 12 ? hours : (hours - 12)) : "오전 " + (hours == 0 ? 12 : hours)) + ":" + (minutes < 10 ? "0"+minutes : minutes));
         endTime.setText((isEndPM ? "오후 " + (hours +1 == 12 ? hours +1 : (hours +1 - 12)) : "오전 " + (hours +1 == 0 ? 12 : hours +1)) + ":" + (minutes < 10 ? "0"+minutes : minutes));
-        //endTime.setText();
         years = CalendarDay.today().getYear();
         months = getMonthsFormatting(CalendarDay.today().getMonth());
         days =  getDaysFormatting(CalendarDay.today().getDay());
@@ -95,6 +93,8 @@ public class AppointmentActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(adapter);

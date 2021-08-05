@@ -36,29 +36,32 @@ public class PlanFragment extends Fragment {
 
         floatingActionButton = rootView.findViewById(R.id.f_btn_create_appointment);
         materialCalendarView = rootView.findViewById(R.id.calendar_view);
-        CalendarDay d = CalendarDay.today();
-        materialCalendarView.clearSelection();
-        MaterialCalendarView.State da = materialCalendarView.state();
 
-        MaterialCalendarView.StateBuilder aaa= da.edit();
-        aaa.setMaximumDate(CalendarDay.from(2022,12,31));
-        aaa.setMinimumDate(CalendarDay.from(2019,1,1));
-        aaa.isCacheCalendarPositionEnabled(true);
-        aaa.commit();
-        materialCalendarView.setContentDescriptionCalendar("에효");
+        CalendarDay today = CalendarDay.today();
+        materialCalendarView.setCurrentDate(CalendarDay.from(today.getYear(),today.getMonth()+1,today.getDay()));
+        materialCalendarView.setSelectedDate(CalendarDay.from(today.getYear(),today.getMonth()+1,today.getDay()));
+//        materialCalendarView.clearSelection(); // 선택 모두 취소
+        MaterialCalendarView.State state = materialCalendarView.state();
+        MaterialCalendarView.StateBuilder stateBuilder= state.edit();
+        stateBuilder.setMaximumDate(CalendarDay.from(2022,12,31));
+        stateBuilder.setMinimumDate(CalendarDay.from(2019,1,1));
+        stateBuilder.isCacheCalendarPositionEnabled(true);
+        stateBuilder.commit();
+
+        materialCalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
+//        materialCalendarView.setContentDescriptionCalendar("에효");
         materialCalendarView.setArrowColor(Color.parseColor("#f1a53e"));
-        materialCalendarView.setLeftArrowMask(getResources().getDrawable(R.drawable.ic_launcher_foreground));
-        materialCalendarView.setContentDescriptionArrowFuture("앞");
-        materialCalendarView.setContentDescriptionArrowPast("뒤");
+//        materialCalendarView.setLeftArrowMask(getResources().getDrawable(R.drawable.ic_launcher_foreground)); // 이동 버튼 디자인 변경
+//        materialCalendarView.setContentDescriptionArrowFuture("앞"); //정체불명
+//        materialCalendarView.setContentDescriptionArrowPast("뒤"); //정체불명
         materialCalendarView.setDynamicHeightEnabled(true);
         materialCalendarView.setTitleAnimationOrientation(MaterialCalendarView.HORIZONTAL);
-        materialCalendarView.setCurrentDate(CalendarDay.from(2021,10,1));
         materialCalendarView.setSelectionColor(Color.parseColor("#f1e3a9"));
         materialCalendarView.setAllowClickDaysOutsideCurrentMonth(true);
         materialCalendarView.setTitleFormatter(new TitleFormatter() {
             @Override
             public CharSequence format(CalendarDay day) {
-                return day.getYear()+"에에에엥ㅇㅇㅇ"+day.getMonth();
+                return day.getYear()+"년 "+day.getMonth()+"월";
             }
         });
 
@@ -70,12 +73,6 @@ public class PlanFragment extends Fragment {
             }
         });
 
-//        materialCalendarView.setWeekDayFormatter(new WeekDayFormatter() {
-//            @Override
-//            public CharSequence format(int dayOfWeek) {
-//                return dayOfWeek+"ㅇ정뱔비";
-//            }
-//        });
         materialCalendarView.setDayFormatter(new DayFormatter() {
             @NonNull
             @Override
@@ -84,14 +81,9 @@ public class PlanFragment extends Fragment {
             }
         });
 
-        List<CalendarDay> list = materialCalendarView.getSelectedDates();
-//        materialCalendarView.set
-        //materialCalendarView.selectRange(CalendarDay.from(2019,1,1),CalendarDay.from(2022, 12,31));
-        materialCalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                //Log.d("dwd",list.get(0).getDay()+"");
                 Log.d("selected",date.getDay()+"");
             }
         });
@@ -102,9 +94,9 @@ public class PlanFragment extends Fragment {
                 DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog_MinWidth ,new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Log.d("date",year +" "+(month+1)+" "+dayOfMonth);
+                        materialCalendarView.setCurrentDate(CalendarDay.from(year, month+1, dayOfMonth));
                     }
-                }, d.getYear(), d.getMonth(),d.getDay());
+                }, today.getYear(), today.getMonth(),today.getDay());
                 dialog.getDatePicker().setCalendarViewShown(false);
                 dialog.show();
             }
