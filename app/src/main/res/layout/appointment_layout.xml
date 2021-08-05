@@ -173,21 +173,54 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                     android:padding="10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
+                        android:layout_weight="2"
                         android:layout_height="wrap_content"
                         android:text="@string/importance"
                         android:textSize="20dp"
                         android:textColor="@color/colorBlack"
                         />
-
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_weight="8"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                     <SeekBar
                         android:id="@+id/seekbar_importance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:max="5"
-                        android:min="1">
+                        android:min="1"
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:progressDrawable="@drawable/seek_background">
                     </SeekBar>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0px"
+                            android:layout_weight="5"
+                            android:layout_height="wrap_content"
+                            android:text="덜 중요"
+                            android:textSize="15dp"
+                            android:textColor="@color/colorBlack"
+                            />
+                        <TextView
+                            android:layout_width="0px"
+                            android:layout_weight="5"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="가장 중요"
+                            android:textSize="15dp"
+                            android:textColor="@color/colorBlack"
+                            />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
 
                 </LinearLayout>
 
