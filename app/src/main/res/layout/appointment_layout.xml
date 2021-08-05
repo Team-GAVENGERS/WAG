@@ -21,6 +21,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 android:textSize="30dp"
                 android:textColorHint="@color/colorBlack"
                 android:gravity="center"
+                android:background="@null"
                 />
 
             <LinearLayout
@@ -183,7 +184,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/seekbar_importance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp">
+                        android:layout_marginLeft="15dp"
+                        android:max="5"
+                        android:min="1">
                     </SeekBar>
 
                 </LinearLayout>
