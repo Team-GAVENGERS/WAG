@@ -3,8 +3,10 @@ package gavengers.wag;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,10 @@ import com.prolificinteractive.materialcalendarview.format.WeekDayFormatter;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,44 +46,23 @@ public class PlanFragment extends Fragment {
     private ArrayList<Appointment> infoList;
     private MaterialCalendarView materialCalendarView;
     private FloatingActionButton floatingActionButton;
+    private boolean[] isUsed;
+    public ViewGroup rootView;
+    private int width;
+    private int height;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView =(ViewGroup) inflater.inflate(R.layout.plan_layout, container, false);
-
-        floatingActionButton = rootView.findViewById(R.id.f_btn_create_appointment);
-        materialCalendarView = rootView.findViewById(R.id.calendar_view);
-
+        rootView = (ViewGroup) inflater.inflate(R.layout.plan_layout, container, false);
         getInfoData();
 
-        CalendarDay today = CalendarDay.today();
-        materialCalendarView.setCurrentDate(CalendarDay.from(today.getYear(),today.getMonth()+1,today.getDay()));
-        materialCalendarView.setSelectedDate(CalendarDay.from(today.getYear(),today.getMonth()+1,today.getDay()));
-//        materialCalendarView.clearSelection(); // 선택 모두 취소
-        MaterialCalendarView.State state = materialCalendarView.state();
-        MaterialCalendarView.StateBuilder stateBuilder= state.edit();
-        stateBuilder.setMaximumDate(CalendarDay.from(2022,12,31));
-        stateBuilder.setMinimumDate(CalendarDay.from(2019,1,1));
-        stateBuilder.isCacheCalendarPositionEnabled(true);
-        stateBuilder.commit();
-
-        materialCalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
-//        materialCalendarView.setContentDescriptionCalendar("에효");
-        materialCalendarView.setArrowColor(Color.parseColor("#f1a53e"));
-//        materialCalendarView.setLeftArrowMask(getResources().getDrawable(R.drawable.ic_launcher_foreground)); // 이동 버튼 디자인 변경
-//        materialCalendarView.setContentDescriptionArrowFuture("앞"); //정체불명
-//        materialCalendarView.setContentDescriptionArrowPast("뒤"); //정체불명
-        materialCalendarView.setDynamicHeightEnabled(true);
-        materialCalendarView.setTitleAnimationOrientation(MaterialCalendarView.HORIZONTAL);
-        materialCalendarView.setSelectionColor(Color.parseColor("#f1e3a9"));
-        materialCalendarView.setAllowClickDaysOutsideCurrentMonth(true);
-        materialCalendarView.setTitleFormatter(new TitleFormatter() {
-            @Override
-            public CharSequence format(CalendarDay day) {
-                return day.getYear()+"년 "+day.getMonth()+"월";
-            }
-        });
-
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
+        height = size.y;
+        floatingActionButton = rootView.findViewById(R.id.f_btn_create_appointment);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,54 +71,131 @@ public class PlanFragment extends Fragment {
             }
         });
 
+        return rootView;
+    }
+
+    public void calendarTotal() {
+        materialCalendarView = rootView.findViewById(R.id.calendar_view);
+        materialCalendarView.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay day) {
+                return day.getYear() + "년 " + (day.getMonth() + 1) + "월";
+            }
+        });
+        CalendarDay today = CalendarDay.today();
+        materialCalendarView.setCurrentDate(CalendarDay.from(today.getYear(), today.getMonth(), today.getDay()));
+        materialCalendarView.setSelectionColor(Color.parseColor("#969696"));
+//        materialCalendarView.setSelectedDate(CalendarDay.from(today.getYear(), today.getMonth(), today.getDay()));
+        materialCalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
+        materialCalendarView.setArrowColor(Color.parseColor("#f1a53e"));
+        materialCalendarView.setTitleAnimationOrientation(MaterialCalendarView.HORIZONTAL);
+
+        materialCalendarView.setTileHeight((int)(height * 0.11)); // 디바이스 전체 높이의 11%만큼 타일의 높이 설정
+        /**
+         *  ※기본 설정대로 했을 경우
+         * 각 날마다의 보여지는 최대 일정 개수는 2개 (이론상 총 3개 {day + 일정들})
+         * 각 일정 Title의 최대 길이는 4 +글씨가 짤리면 다음 줄로 넘어감
+         * ※ Tile의 높이를 올릴 경우 Title의 길이는 조절 못하더라도 보여지는 개수 조절 가능
+         */
         materialCalendarView.setDayFormatter(new DayFormatter() {
             @NonNull
             @Override
             public String format(@NonNull CalendarDay day) {
-                return day.getDay()+"\n이잉기";
+                /**
+                 * 각각의 날을 캘린더에 표시하는 formatting method
+                 * 그 날짜의 일정 데이터를 가져오고 조건에 맞게 일정 데이터의 Title을 함께 출력력
+                */
+                Integer[] tmp = compareDayIsThere(day); //
+                if (tmp.length == 1) { // 일정이 1개일 때
+                    return day.getDay() + "\n" + infoList.get(tmp[0]).getAppointmentName();
+                } else if (tmp.length > 1) { // 일정이 2개 이상일 때
+                    StringBuilder txt = new StringBuilder(day.getDay() + "\n");
+                    for (Integer integer : tmp) {
+                        txt.append(infoList.get(integer).getAppointmentName()).append("\n");
+                    }
+                    return txt.toString();
+                } else { // 일정이 없을 때
+                    return day.getDay() + "";
+                }
             }
         });
 
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                Log.d("selected",date.getDay()+"");
+                Log.d("selected", date.getDay() + "");
             }
         });
 
         materialCalendarView.setOnTitleClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog_MinWidth ,new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(getContext(), android.R.style.Theme_Holo_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        materialCalendarView.setCurrentDate(CalendarDay.from(year, month+1, dayOfMonth));
+                        materialCalendarView.setCurrentDate(CalendarDay.from(year, month + 1, dayOfMonth));
                     }
-                }, today.getYear(), today.getMonth(),today.getDay());
+                }, today.getYear(), today.getMonth(), today.getDay());
                 dialog.getDatePicker().setCalendarViewShown(false);
                 dialog.show();
             }
         });
-
-        return rootView;
     }
 
-    private void getInfoData(){
+    private void getInfoData() {
         infoList = new ArrayList<>();
         Firestore.getInfo(Auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    if(task.getResult().size() > 0){
-                        for(DocumentSnapshot doc : task.getResult()){
+                if (task.isSuccessful()) {
+                    if (task.getResult().size() > 0) {
+                        for (DocumentSnapshot doc : task.getResult()) {
                             Appointment info = doc.toObject(Appointment.class);
-                            infoList.add(info);
+                            if (info != null) {
+                                infoList.add(info);
+                            } else {
+                                Log.d("appoint null", "data is null");
+                            }
                         }
+                        isUsed = new boolean[infoList.size()];
+                        Arrays.fill(isUsed, false);
                     }
-                }else{
+                } else {
                     Toast.makeText(getContext(), "getInfoData ERROR !!", Toast.LENGTH_SHORT).show();
                 }
+                calendarTotal();
             }
         });
+    }
+
+    /**
+     * parameter의 날짜와 일정 데이터 리스트의 날짜가 동일 할때 그 일정 object의 index를 기록해서 반환
+     * @param day
+     * @return parameter의 그 날짜에서 일정 데이터 리스트에 해당하는 index 정수 배열
+     */
+    private Integer[] compareDayIsThere(CalendarDay day) {
+        ArrayList<Integer> temp = new ArrayList<>();
+        String formatted = day.getYear() + "-" + getMonthsFormatting(day.getMonth()) + "-" + getDaysFormatting(day.getDay());
+        for (int i = 0; i < infoList.size(); ++i) {
+            if (formatted.equals(infoList.get(i).getStartTime().split(" ")[0])) {
+                if (!isUsed[i]) {
+                    isUsed[i] = true;
+                    temp.add(i);
+                }
+            }
+        }
+        if (temp.size() != 0) {
+            return temp.toArray(new Integer[temp.size()]);
+        } else {
+            return new Integer[0];
+        }
+    }
+
+    public String getMonthsFormatting(int month) {
+        return (month + 1) < 10 ? "0" + (month + 1) : (month + 1) + "";
+    }
+
+    public String getDaysFormatting(int day) {
+        return day < 10 ? "0" + day : day + "";
     }
 }
