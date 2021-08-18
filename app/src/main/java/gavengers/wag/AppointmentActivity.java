@@ -25,7 +25,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firestore.v1beta1.WriteResult;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.text.SimpleDateFormat;
@@ -421,14 +423,28 @@ public class AppointmentActivity extends AppCompatActivity {
                         spinnerPlaceType.getSelectedItemPosition() + 1,
                         participants,
                         strMemo,
-                        Auth.getCurrentUser().getUid());
+                        Auth.getCurrentUser().getUid(),
+                        "");
 
                 Firestore.writeNewPost(appointment)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Toast.makeText(getApplicationContext(),"약속 생성을 성공하였습니다", Toast.LENGTH_SHORT).show();
-                                finish();
+                                Log.d("AppointmentActivity",documentReference.getId());
+                                // 새롭게 만들어지는 문서의 ID (documentID)로 접근하여 documentId 필드값을 업데이트
+                                DocumentReference docRef = FirebaseFirestore.getInstance().collection("appointment").document(documentReference.getId());
+                                docRef.update("documentId",documentReference.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Log.d("AppointmentActivity",documentReference.getId());
+                                            finish();
+                                        }else{
+                                            Toast.makeText(getApplicationContext(), "문서 ID 저장에 실패하였습니다", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
