@@ -9,8 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarUtils;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -20,13 +25,20 @@ import com.prolificinteractive.materialcalendarview.format.DayFormatter;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.prolificinteractive.materialcalendarview.format.WeekDayFormatter;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import gavengers.wag.util.Auth;
+import gavengers.wag.util.Firestore;
+import gavengers.wag.util.model.Appointment;
+
 public class PlanFragment extends Fragment {
+    private ArrayList<Appointment> infoList;
     private MaterialCalendarView materialCalendarView;
     private FloatingActionButton floatingActionButton;
     @Nullable
@@ -36,6 +48,8 @@ public class PlanFragment extends Fragment {
 
         floatingActionButton = rootView.findViewById(R.id.f_btn_create_appointment);
         materialCalendarView = rootView.findViewById(R.id.calendar_view);
+
+        getInfoData();
 
         CalendarDay today = CalendarDay.today();
         materialCalendarView.setCurrentDate(CalendarDay.from(today.getYear(),today.getMonth()+1,today.getDay()));
@@ -101,8 +115,26 @@ public class PlanFragment extends Fragment {
                 dialog.show();
             }
         });
+
         return rootView;
+    }
 
-
+    private void getInfoData(){
+        infoList = new ArrayList<>();
+        Firestore.getInfo(Auth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    if(task.getResult().size() > 0){
+                        for(DocumentSnapshot doc : task.getResult()){
+                            Appointment info = doc.toObject(Appointment.class);
+                            infoList.add(info);
+                        }
+                    }
+                }else{
+                    Toast.makeText(getContext(), "getInfoData ERROR !!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

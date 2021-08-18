@@ -2,6 +2,7 @@ package gavengers.wag.util;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -32,11 +33,11 @@ public class Firestore {
     /**
      * 약속 info를 불러오는 Query를 생성한다
      * @author Taehyun Park
-     * @param date ,userId
+     * @param  userId
      * @return Query
      */
-    public static Query getInfoDate(String date, String userId) {
-        return getFirestoreInstance().collection("appointment").whereEqualTo("date",date).whereEqualTo("writer",userId).limit(10);
+    public static Query getInfo(String userId) {
+        return getFirestoreInstance().collection("appointment").whereEqualTo("writerId",userId);
     }
 
 }

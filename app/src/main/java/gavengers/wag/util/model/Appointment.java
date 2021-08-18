@@ -15,8 +15,11 @@ public class Appointment {
     private ArrayList<String> participants; // 참여자 리스트 (추후에 )
     private String memoStr;  // 메모 String
     private String writerId; // 작성자
+    private String documentId; // 약속 식별 ID
 
-    public Appointment(int appointType, String appointmentName, String startTime, String endTime, int importance, int place, ArrayList<String> participants, String memoStr, String writerId) {
+    public Appointment(){ }
+
+    public Appointment(int appointType, String appointmentName, String startTime, String endTime, int importance, int place, ArrayList<String> participants, String memoStr, String writerId, String documentId) {
         this.appointType = appointType;
         this.appointmentName = appointmentName;
         this.startTime = startTime;
@@ -26,6 +29,15 @@ public class Appointment {
         this.participants = participants;
         this.memoStr = memoStr;
         this.writerId = writerId;
+        this.documentId = documentId;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public int getAppointType() {
