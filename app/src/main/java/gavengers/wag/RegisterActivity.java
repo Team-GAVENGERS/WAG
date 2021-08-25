@@ -191,11 +191,11 @@ public class RegisterActivity extends AppCompatActivity {
                             Map<String, Object> user = new HashMap<>();
                             user.put("uid", uid);
                             user.put("nickname", nickname);
-                                db.collection("UserData").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                db.collection("user").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         // success
-                                        Log.d("UserData/UID", "UserData successfully written!");
+                                        Log.d("user/UID", "user successfully written!");
                                         Toast.makeText(getApplicationContext(), "회원가입 성공",
                                                 Toast.LENGTH_SHORT).show();
 
@@ -204,7 +204,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                                                         if (task.isSuccessful()) {
                                                             String idToken = task.getResult().getToken();
-                                                            Log.d("UserData/Token", idToken);
+                                                            Log.d("user/Token", idToken);
                                                         } else {
                                                             // Handle error -> task.getException();
                                                         }
@@ -216,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 //fail
-                                                Log.w("UserData/UID", "UserData written failed", e);
+                                                Log.w("user/UID", "userv written failed", e);
                                             }
                                         });
 
