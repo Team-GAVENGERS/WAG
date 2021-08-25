@@ -28,8 +28,12 @@ import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 import com.prolificinteractive.materialcalendarview.format.WeekDayFormatter;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,6 +172,23 @@ public class PlanFragment extends Fragment {
         });
     }
 
+    private void checkDateRange(Appointment info){
+        try {
+            Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(info.getStartTime());
+            Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(info.getEndTime());
+            Calendar startCal = Calendar.getInstance();
+            Calendar endCal = Calendar.getInstance();
+            startCal.setTime(startDate);
+            endCal.setTime(endDate);
+            long diffSec = (startCal.getTimeInMillis() - endCal.getTimeInMillis()) / 1000;
+            long diffDays = diffSec / (24 * 60 * 60); // 일 차이
+            for(long i=0; i<diffDays; ++i){
+                // 반복하기
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * parameter의 날짜와 일정 데이터 리스트의 날짜가 동일 할때 그 일정 object의 index를 기록해서 반환
      * @param day
