@@ -1,5 +1,6 @@
 package gavengers.wag;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,6 +23,9 @@ import com.naver.maps.map.NaverMapSdk;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
+import com.naver.maps.map.overlay.PathOverlay;
+
+import java.util.ArrayList;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private com.naver.maps.map.MapFragment mapFragment;
@@ -37,15 +41,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         NaverMapSdk.getInstance(this.getContext()).setClient(
                 new NaverMapSdk.NaverCloudPlatformClient("eh5bexu1t1"));
 
-        return inflater.inflate(R.layout.map_layout, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mapView = view.findViewById(R.id.map_view);
+        mapView = v.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
+        return inflater.inflate(R.layout.map_layout, container, false);
     }
 
     @Override
@@ -76,9 +76,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 naverMap.setMaxZoom(0.0);
                 drawMarker(naverMap);
                 onMapReady(naverMap);
+                drawPath(naverMap);
             });
-
-
         }
     }
 
@@ -91,6 +90,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Log.d("marker",marker.getPosition().toString());
         marker.setIcon(OverlayImage.fromResource(R.drawable.marker));
         marker.setMap(naverMap);
+    }
+
+    /**
+     * 지도에 Path를 표시한다
+     * @author Taehyun Park
+     * @param naverMap NaverMap Object
+     * 파라미터 추가예정
+     */
+    public void drawPath(NaverMap naverMap){
+        String [] str_coordinate = getResources().getStringArray(R.array.gachon_globalcampus_coordinate); // 학교 좌표가 저장된 좌표 배열 불러오기
+        ArrayList<LatLng> coordinates = new ArrayList<>();  // Location 좌표 저장할 ArrayList
+
+        /*
+        for (int i : pathArr){
+            String [] arr = str_coordinate[i].split(",");
+            coordinates.add(new LatLng(Double.parseDouble(arr[0]), Double.parseDouble(arr[1])));
+        }*/
+
+        // TEST CODE
+        String [] arr = str_coordinate[0].split(",");
+        coordinates.add(new LatLng(Double.parseDouble(arr[0]), Double.parseDouble(arr[1])));
+
+        arr = str_coordinate[1].split(",");
+        coordinates.add(new LatLng(Double.parseDouble(arr[0]), Double.parseDouble(arr[1])));
+
+        arr = str_coordinate[2].split(",");
+        coordinates.add(new LatLng(Double.parseDouble(arr[0]), Double.parseDouble(arr[1])));
+
+        PathOverlay path = new PathOverlay(); // path 객체 생성
+        path.setCoords(coordinates); // Location 좌표 setting
+        path.setColor(Color.GREEN); // Path 색상
+
+        path.setMap(naverMap);      // Map에 표시
     }
 
     @Override
