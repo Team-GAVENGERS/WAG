@@ -31,6 +31,7 @@ import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import gavengers.wag.util.Auth;
 import gavengers.wag.util.Firestore;
@@ -452,6 +453,7 @@ public class AppointmentActivity extends AppCompatActivity {
         });
 
     }
+
     public String getMonthsFormatting(int month){
         return (month+1) < 10 ? "0"+(month+1) : (month+1)+"";
     }
