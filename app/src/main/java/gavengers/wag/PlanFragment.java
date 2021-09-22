@@ -62,7 +62,6 @@ public class PlanFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = (ViewGroup) inflater.inflate(R.layout.plan_layout, container, false);
-        getInfoData();
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
