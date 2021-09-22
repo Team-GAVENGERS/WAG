@@ -41,6 +41,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import gavengers.wag.util.Auth;
 import gavengers.wag.util.Firestore;
@@ -51,6 +52,7 @@ public class PlanFragment extends Fragment {
     private MaterialCalendarView materialCalendarView;
     private FloatingActionButton floatingActionButton;
     private boolean[] isUsed;
+    private SwipeRefreshLayout swipeLayout;
     public ViewGroup rootView;
     private int width;
     private int height;
@@ -67,6 +69,7 @@ public class PlanFragment extends Fragment {
         display.getSize(size);
         width = size.x;
         height = size.y;
+        swipeLayout = rootView.findViewById(R.id.swipe_board);
         floatingActionButton = rootView.findViewById(R.id.f_btn_create_appointment);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,8 +78,15 @@ public class PlanFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
+        setRefresh(); // swipe 이벤트 리스너 대기
         return rootView;
+    }
+
+    // 일정 생성 후 데이터 갱신
+    @Override
+    public void onResume() {
+        super.onResume();
+        getInfoData();
     }
 
     public void calendarTotal() {
@@ -170,6 +180,7 @@ public class PlanFragment extends Fragment {
                     Toast.makeText(getContext(), "getInfoData ERROR !!", Toast.LENGTH_SHORT).show();
                 }
                 calendarTotal();
+                swipeLayout.setRefreshing(false); // 무한 새로고침 방지
             }
         });
     }
@@ -254,5 +265,14 @@ public class PlanFragment extends Fragment {
      */
     public String getDaysFormatting(int day) {
         return day < 10 ? "0" + day : day + "";
+    }
+
+    private void setRefresh() {
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getInfoData();
+            }
+        });
     }
 }
